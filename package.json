@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "refactoring-book-js-code-samples",
+  "version": "1.0.0",
+  "description": "Code samples from the book",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1"
+  }
+}
