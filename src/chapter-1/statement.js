@@ -53,13 +53,13 @@ function renderPlainText(data) {
   return result;
 }
 
-export function statement(invoice, plays) {
+function createStatementData(invoice, plays) {
   let statementData = {};
   statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.customer = invoice.customer;
   statementData.totalAmount = totalAmount(statementData);
   statementData.volumeCredits = totalVolumeCredits(statementData);
-  return renderPlainText(statementData);
+  return statementData;
 
   function totalAmount(data) {
     return data.performances.reduce((total, p) => total + amountFor(p), 0);
@@ -110,4 +110,8 @@ export function statement(invoice, plays) {
     result.volumeCredits = volumeCreditsFor(result);
     return result;
   }
+}
+
+export function statement(invoice, plays) {
+  return renderPlainText(createStatementData(invoice, plays));
 }
