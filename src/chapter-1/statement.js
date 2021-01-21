@@ -62,11 +62,7 @@ export function statement(invoice, plays) {
   return renderPlainText(statementData);
 
   function totalAmount(data) {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += amountFor(perf);
-    }
-    return result;
+    return data.performances.reduce((total, p) => total + amountFor(p), 0);
   }
 
   function amountFor(performance) {
@@ -96,11 +92,7 @@ export function statement(invoice, plays) {
   }
 
   function totalVolumeCredits(data) {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.volumeCredits;
-    }
-    return result;
+    return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
   }
 
   function volumeCreditsFor(performance) {
