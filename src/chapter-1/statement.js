@@ -54,17 +54,16 @@ function renderPlainText(data) {
 }
 
 export function statement(invoice, plays) {
-  const statementData = {
-    customer: invoice.customer,
-    performances: invoice.performances.map(enrichPerformance),
-    totalAmount: totalAmount(),
-    volumeCredits: volumeCredits(),
-  };
+  let statementData = {};
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  statementData.customer = invoice.customer;
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.volumeCredits = totalVolumeCredits(statementData);
   return renderPlainText(statementData);
 
-  function totalAmount() {
+  function totalAmount(data) {
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += amountFor(perf);
     }
     return result;
@@ -72,7 +71,7 @@ export function statement(invoice, plays) {
 
   function amountFor(performance) {
     let result = 0;
-    switch (playFor(performance).type) {
+    switch (performance.play.type) {
       case 'tragedy':
         result = 40000;
         if (performance.audience > 30) {
@@ -87,7 +86,7 @@ export function statement(invoice, plays) {
         result += 300 * performance.audience;
         break;
       default:
-        throw new Error(`unknown type: ${playFor(performance).type}`);
+        throw new Error(`unknown type: ${performance.play.type}`);
     }
     return result;
   }
@@ -96,27 +95,27 @@ export function statement(invoice, plays) {
     return plays[perf.playID];
   }
 
-  function volumeCredits() {
+  function totalVolumeCredits(data) {
     let result = 0;
-    for (let perf of invoice.performances) {
-      result += volumeCreditsFor(perf);
+    for (let perf of data.performances) {
+      result += perf.volumeCredits;
     }
     return result;
   }
 
   function volumeCreditsFor(performance) {
     let result = Math.max(performance.audience - 30, 0);
-    if ('comedy' === playFor(performance).type) {
+    if ('comedy' === performance.play.type) {
       result += Math.floor(performance.audience / 5);
     }
     return result;
   }
 
   function enrichPerformance(performance) {
-    return {
-      ...performance,
-      play: playFor(performance),
-      amount: amountFor(performance),
-    };
+    let result = {...performance};
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
+    return result;
   }
 }
