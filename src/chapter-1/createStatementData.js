@@ -4,6 +4,10 @@ class PerformanceCalculator {
     this.play = play;
   }
 
+  static for(performance, play) {
+    return new PerformanceCalculator(performance, play);
+  }
+
   get audience() {
     return this.performance.audience;
   }
@@ -60,6 +64,6 @@ export function createStatementData(invoice, plays) {
   }
 
   function enrichPerformance(performance) {
-    return new PerformanceCalculator({...performance}, playFor(performance));
+    return PerformanceCalculator.for({...performance}, playFor(performance));
   }
 }
