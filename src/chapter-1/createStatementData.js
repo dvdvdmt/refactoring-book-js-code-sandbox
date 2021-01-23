@@ -5,6 +5,12 @@ class PerformanceCalculator {
   }
 
   static for(performance, play) {
+    switch (play.type) {
+      case 'tragedy':
+        return new TragedyCalculator(performance, play);
+      case 'comedy':
+        return new ComedyCalculator(performance, play);
+    }
     return new PerformanceCalculator(performance, play);
   }
 
@@ -42,6 +48,8 @@ class PerformanceCalculator {
     return result;
   }
 }
+class TragedyCalculator extends PerformanceCalculator {}
+class ComedyCalculator extends PerformanceCalculator {}
 
 export function createStatementData(invoice, plays) {
   let result = {};
