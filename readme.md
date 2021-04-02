@@ -6,4 +6,4 @@ The aim of this project is to provide a starting point for those who want to
 follow refactoring process while reading the book.
 
 Just install dependencies with `npm i` and periodically run tests with
-`npm test`.
+`npm test` or `npm run test:watch`.
